@@ -82,8 +82,8 @@ let randomNum = getRandomNum();
 const newDate = new Date();
 const hours = newDate.getHours();
 const timeOfDay = getTimeOfDay(hours);
-function setBg() {
-   
+
+function setBg() {   
     const bgNum = String (randomNum).padStart(2 , '0');
     const body = document.querySelector('body');
     const img = new Image();
