@@ -127,11 +127,11 @@ const city = document.querySelector('.city')
 city.addEventListener('change', getWeather)
 
 async function getWeather() {  
-    //const url = `https://api.openweathermap.org/data/2.5/weather?q=Minsk&lang=en&appid=51764fe870c4f1ec1e742c8973b62b40&units=metric`;
-     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=51764fe870c4f1ec1e742c8973b62b40&units=metric`
+    // const url = `https://api.openweathermap.org/data/2.5/weather?q=Minsk&lang=en&appid=51764fe870c4f1ec1e742c8973b62b40&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=51764fe870c4f1ec1e742c8973b62b40&units=metric`
     const res = await fetch(url);
     const data = await res.json();     
-    console.log(data.weather[0].id, data.weather[0].description, data.main.temp, data.wind.speed );
+    // console.log(data.weather[0].id, data.weather[0].description, data.main.temp, data.wind.speed );
 
     weatherIcon.className = "weather-icon owf";
     weatherIcon.classList.add(`owf-${data.weather[0].id}`);
@@ -145,17 +145,39 @@ async function getWeather() {
 // Weather ---------------------------------------------------------------------------------------------------------------
 // Quotes ---------------------------------------------------------------------------------------------------------------
 
-    // async function getQuotes() {  
-    //     const quotes = 'data.json';
-    //     const res = await fetch(quotes);
-    //     const data = await res.json(); 
-    //     console.log(data);
-    // }
-    // getQuotes();  
-  
-  
-  
-  
-  
+const quote = document.querySelector('.quote');
+const author = document.querySelector('.author');
+const changeQuote = document.querySelector('.change-quote');
+const numRun = () => {
+    return (Math.floor (Math.random() * 20 ))
+ }
+let num = numRun(); 
+console.log (num)
+
+async function getQuotes() {  
+  const quotes = 'data.json';
+  const res = await fetch(quotes);
+  const data = await res.json(); 
+//   console.log(data[0].author, data[0].text );
+//   console.log(data[1].author, data[1].text );
+//   console.log(data[2].author, data[2].text );
+
+  quote.textContent = `${data[num].text}`;
+  author.textContent = `${data[num].author}`;
+}
+getQuotes();
+
+function getReload() { 
+    if (num <20) {
+        num = numRun() + 1;
+        console.log (num)
+        }
+    else { num = 1;
+        console.log (num)}
+    getQuotes();
+}
+
+changeQuote.addEventListener('click', getReload);
+
   
 // Quotes ---------------------------------------------------------------------------------------------------------------
