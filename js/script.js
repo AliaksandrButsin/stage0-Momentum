@@ -1,3 +1,9 @@
+const state = {
+    language: 'en',
+    photoSource: 'github',
+    blocks: ['time', 'date','greeting', 'quote', 'weather', 'audio', 'todolist']
+  }
+
 // Clock ----------------------------------------------------------------------------------------------------------------
 const time = document.querySelector('.time');
 const date = document.querySelector('.date');
@@ -142,9 +148,23 @@ async function getWeather() {
   }
   getWeather()
 
+  function setLocalStorage1() {
+    const city = document.querySelector('.city')
+    localStorage.setItem('city', city.value);
+  }
+  window.addEventListener('beforeunload', setLocalStorage1);
+
+  function getLocalStorage1() {
+    const city = document.querySelector('.city');
+    if(localStorage.getItem('city')) {
+      city.value = localStorage.getItem('city');
+    }
+  }
+  window.addEventListener('load', getLocalStorage1);
+
+
 // Weather ---------------------------------------------------------------------------------------------------------------
 // Quotes ---------------------------------------------------------------------------------------------------------------
-
 const quote = document.querySelector('.quote');
 const author = document.querySelector('.author');
 const changeQuote = document.querySelector('.change-quote');
@@ -152,32 +172,164 @@ const numRun = () => {
     return (Math.floor (Math.random() * 20 ))
  }
 let num = numRun(); 
-console.log (num)
-
 async function getQuotes() {  
   const quotes = 'data.json';
   const res = await fetch(quotes);
   const data = await res.json(); 
-//   console.log(data[0].author, data[0].text );
-//   console.log(data[1].author, data[1].text );
-//   console.log(data[2].author, data[2].text );
-
   quote.textContent = `${data[num].text}`;
   author.textContent = `${data[num].author}`;
 }
 getQuotes();
-
 function getReload() { 
     if (num <20) {
         num = numRun() + 1;
-        console.log (num)
         }
-    else { num = 1;
-        console.log (num)}
+    else { num = 0;}
     getQuotes();
 }
-
 changeQuote.addEventListener('click', getReload);
+// Quotes --------------------------------------------------------------------------
+// Play-List -------------------------------------------------------------------
+const playList = [
+    {      
+      title: 'Aqua Caelestis',
+      src: '../assets/sounds/Aqua Caelestis.mp3',
+      duration: '00:39'
+    },  
+    {      
+      title: 'River Flows In You',
+      src: '../assets/sounds/River Flows In You.mp3',
+      duration: '01:37'
+    },
+    {      
+        title: 'Ennio Morricone',
+        src: '../assets/sounds/Ennio Morricone.mp3',
+        duration: '01:37'
+      },  
+      {      
+        title: 'Summer Wind',
+        src: '../assets/sounds/Summer Wind.mp3',
+        duration: '01:50'
+      }
+  ]
+//   console.log (playList)
+// Play-List --------------------------------------------------------------
+// Player --------------------------------------------------------------------------
+let isPlay = false;
+let playNum = 0;
 
-  
-// Quotes ---------------------------------------------------------------------------------------------------------------
+
+const playBtn = document.querySelector('.play');
+const playNex = document.querySelector('.play-next');
+const playPre = document.querySelector('.play-prev');
+const audio = new Audio();
+
+function playAudio() {
+if(!isPlay) {
+    audio.src = playList[playNum].src;
+    audio.currentTime = 0;
+    audio.play();
+    isPlay = true;
+}
+else { audio.pause();
+    isPlay = false;}
+}
+playBtn.addEventListener('click', playAudio);
+
+function toggleBtn() {
+    playBtn.classList.toggle('pause');
+    }
+playBtn.addEventListener('click', toggleBtn);
+
+
+// function playN() {
+//     if(!isPlay) {
+//       audio.play();
+//         isPlay = true;
+//         playBtn.classList.remove('pause')
+//     }
+//     else { 
+//         // audio.pause();
+//         isPlay = false;
+//         playBtn.classList.add('pause')
+//         }
+//     }
+
+
+// Player ----------------------------------------------------------------------
+
+// Player Next Prew -------------------------------------------------------
+
+            function playNext() {
+                if (playNum < 3){
+                playNum = playNum + 1;
+                audio.src = playList[playNum].src;
+                audio.currentTime = 0;
+                audio.play();
+                isPlay = true;
+                playBtn.classList.add('pause')
+                console.log (playNum)
+
+                }
+                else {playNum = 0;
+                    audio.src = playList[playNum].src;
+                    audio.currentTime = 0;
+                    audio.play();
+                    isPlay = true;
+                    console.log (playNum)
+                }
+            }
+            function playPrev() {
+                if (playNum > 0){
+                    playNum = playNum - 1;
+                    audio.src = playList[playNum].src;
+                    audio.currentTime = 0;
+                    audio.play();
+                    isPlay = true;
+                    playBtn.classList.add('pause')
+                    console.log (playNum)
+                }
+                else {playNum = 3;
+                    audio.src = playList[playNum].src;
+                    audio.currentTime = 0;
+                    audio.play();
+                    isPlay = true;
+                    console.log (playNum)
+                    }
+            }
+
+            playNex.addEventListener('click', playNext);
+            playPre.addEventListener('click', playPrev);
+
+// Player Next Prew --------------------------------------------------------
+
+
+// let activ = playNum;
+// function act(activ) {
+//     li.classList.add ('.item-active')
+// }
+// act(activ)
+
+// Player li ---------------------------------------------------------------
+let i = 0;
+    playList.forEach(el => {
+    const playy = document.querySelector ('.play-list')
+    const li = document.createElement('li');
+    li.classList.add ('play-item')
+    li.textContent = `${playList[i].title}`;
+    i = i + 1;
+    playy.append(li)
+  })
+// Player li ----------------------------------------------------------------
+
+// Translate ----------------------------------------------------------------
+
+const greetingTranslation = [
+    {      
+        Russian: 'Доброе',
+        English: 'Good',
+        Belorus: 'Добры'
+      },  
+]
+
+// Translate ----------------------------------------------------------------
